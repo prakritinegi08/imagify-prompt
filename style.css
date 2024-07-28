@@ -13,8 +13,9 @@ body{
 h1{
     font-family: monospace;
     font-weight: 600;
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     margin-bottom: 20px;
+    /* margin-top: 100px; */
     color: white;
 
 }
@@ -23,9 +24,9 @@ label{
     font-weight: 600;
 }
 input{
-    max-width: 350px;
+    max-width: 830px;
     width: 90%;
-    height: 30px;
+    height: 60px;
     border-radius: 20px;
     background: #323232;
     padding: 5px;
@@ -36,9 +37,11 @@ input{
 }
 img{
     width: 90%;
-    max-width: 350px;
+    max-width: 500px;
     margin-top: 30px;
     border-radius: 10px;
+    
+    /* border: #323232; */
 }
 
 
