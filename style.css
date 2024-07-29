@@ -65,3 +65,9 @@ img{
 
   cursor: pointer;
 }
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Optional: Adds space between buttons */
+    margin-bottom: 10px; /* Optional: Adds space below the button container */
+}
