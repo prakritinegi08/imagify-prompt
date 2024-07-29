@@ -2,6 +2,7 @@ const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFlMWZmNDcy
 const inputText = document.getElementById("input");
 const image = document.getElementById("image");
 const button = document.getElementById("btn");
+const downloadBtn = document.getElementById("downloadBtn");
 
 async function submitRequest(prompt) {
     const formData = new FormData();
@@ -59,12 +60,13 @@ async function fetchResult(statusUrl) {
 }
 
 async function query() {
-    image.src = "/loading.gif";  // Ensure you have a loading.gif available at the root directory
+    image.src = "/loading.gif";  // Show a loading image while waiting
+    downloadBtn.style.display = 'none'; // Hide download button while waiting
 
     const submitResult = await submitRequest(inputText.value);
 
     if (submitResult && submitResult.status_url) {
-        // Poll the status_url to get the result
+        // Keep checking the status until the image is ready
         let fetchResultData = null;
         while (true) {
             fetchResultData = await fetchResult(submitResult.status_url);
@@ -74,7 +76,7 @@ async function query() {
                 throw new Error('Image generation failed');
             } else {
                 console.log('Status:', fetchResultData.status);
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before polling again
+                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before checking again
             }
         }
 
@@ -88,13 +90,21 @@ button.addEventListener('click', async function() {
     try {
         const result = await query();
         if (result && result.result && result.result.output && result.result.output.length > 0) {
-            image.src = result.result.output[0];
+            const imageUrl = result.result.output[0];
+            image.src = imageUrl;
+
+            // Enable the download button with the image URL
+            downloadBtn.href = imageUrl;
+            downloadBtn.download = 'generated_image.png';
+            downloadBtn.style.display = 'block'; // Show the download button
         } else {
             console.error('Error: Image URL not found in response');
             image.src = ""; // Clear the image if no URL found
+            downloadBtn.style.display = 'none'; // Hide the download button
         }
     } catch (error) {
         console.error('Error:', error);
         image.src = ""; // Clear the image on error
+        downloadBtn.style.display = 'none'; // Hide the download button
     }
 });
